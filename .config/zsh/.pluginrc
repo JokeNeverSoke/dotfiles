@@ -1,0 +1,109 @@
+#!/usr/bin/env zsh
+export ZPLUG_HOME=/usr/local/opt/zplug
+
+### Added by Zinit's installer
+if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
+    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
+    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
+        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+        print -P "%F{160}▓▒░ The clone has failed.%f%b"
+fi
+
+source "$HOME/.zinit/bin/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zinit-zsh/z-a-rust \
+    zinit-zsh/z-a-as-monitor \
+    zinit-zsh/z-a-patch-dl \
+    zinit-zsh/z-a-bin-gem-node
+
+# basic stuff
+zinit light-mode for \
+    OMZP::colored-man-pages \
+    svn OMZP::osx \
+    OMZP::extract \
+    svn OMZP::shell-proxy \
+    svn pick"" OMZP::ripgrep \
+    mafredri/zsh-async \
+    OMZL::directories.zsh
+
+# some cli utilities
+zinit wait lucid for \
+    supercrabtree/k \
+    OMZP::sudo \
+    rupa/z \
+    changyuheng/fz \
+    OMZP::bgnotify \
+    Tarrasch/zsh-bd
+    # OMZP::vi-mode \
+
+# fzf completions
+zinit ice wait lucid
+zinit snippet ~/.fzf.zsh
+
+# pipenv completions (huge)
+zinit ice wait'test -n "$(find . -maxdepth 1 -name "*.py" -print -quit)"' atload'zicompinit; zicdreplay' lucid
+zinit snippet ~/.pipenv.zsh
+
+# gh completions
+zinit ice wait lucid
+zinit snippet ~/.config/gh/ghcom
+
+
+# tmux completions
+zinit wait lucid atload'zicompinit; zicdreplay' blockf for \
+    OMZP::tmux \
+    OMZP::tmuxinator \
+    hellounicorn/zsh-ipfs
+
+# git completions, only when .git present
+zinit wait'git rev-parse --git-dir > /dev/null 2>&1' atload'zicompinit; zicdreplay' lucid blockf for \
+    OMZP::git \
+    OMZP::git-extras \
+    OMZP::tig \
+    OMZP::git-flow-avh \
+    OMZP::git-auto-fetch
+
+# some extra completions
+zinit wait'1' lucid atload'zicompinit; zicdreplay' blockf for \
+    OMZP::pip \
+    OMZP::yarn \
+    OMZP::brew \
+    OMZP::pylint
+    
+# completions & stuff
+zinit light-mode for \
+    atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+        zdharma/fast-syntax-highlighting \
+    michaelaquilina/zsh-you-should-use
+
+# iterm 2 integration
+zinit snippet ~/.iterm2_shell_integration.zsh
+
+# rust
+zinit ice wait lucid
+zinit snippet ~/.cargo/env
+
+# thefuck
+zinit ice wait'1' lucid
+zinit snippet ~/.config/zsh/.thefuck.zsh
+
+# autosuggestions
+zinit wait lucid atload'_zsh_autosuggest_start' light-mode for \
+    zsh-users/zsh-autosuggestions
+
+# prompt
+# zinit ice pick"async.zsh" src"pure.zsh"
+# zinit light sindresorhus/pure
+
+zinit ice depth=1
+zinit light romkatv/powerlevel10k
+
+llog init async
+async_init

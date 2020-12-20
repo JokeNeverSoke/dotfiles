@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+
+const now = new Date()
+const hr = now.getHours()
+
+const name = process.argv.slice(2).join(' ')
+let msg = `Hi, ${name}`
+
+if (hr < 6) { msg = `Early morning, ${name}!` }
+else if (hr < 11) { msg = `Good morning, ${name}!` }
+else if (hr < 13) { msg = `Good noon, ${name}!` }
+else if (hr < 18) { msg = `Good afternoon, ${name}!` }
+else if (hr < 22) { msg = `Good evening, ${name}!` }
+else { msg = `Greetings, night owl!` }
+
+console.log(msg)

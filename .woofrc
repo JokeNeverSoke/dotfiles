@@ -1,0 +1,5 @@
+[main]
+port = 1919
+count = 2
+ip = 0.0.0.0
+compressed = gz

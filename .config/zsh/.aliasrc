@@ -1,0 +1,148 @@
+#!/usr/bin/env zsh
+
+alias yl="yarn lint"
+
+alias ni="nvim"
+alias pipupdate="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
+alias rm="trash"
+
+alias gz="git cz"
+
+alias fk=fuck
+
+function vim {
+  echo "USE NVIM"
+  echo "Punishing you to pause for 5 seconds"
+  for time in 5 4 3 2 1
+  do
+    echo $time
+    sleep 1
+  done
+  n $@
+}
+
+alias fport="sudo lsof -i"
+
+alias dashb="sampler -c ~/.config/sampler/config.yml"
+
+alias expose="lt --host http://sub.zengjoseph.xyz:5555 --port"
+
+cwd () {
+ pwd | pbcopy
+}
+alias t3='things.sh'
+
+battery () {
+  ioreg -l -w0 | rg "fCharge\"=([0-9]{1,3})" -o | rg "[0-9]{1,3}" -o
+}
+
+stu () {
+  curl "https://api.sciers.alanjin.me:2334/stu_query/$1"
+}
+
+stupic () {
+  if [[ -z "$1" ]]; then
+    echo "No input provided!"
+    return
+  fi
+  mkdir -p "$HOME/tmp/icons"
+  if [[ "A" =~ \d{4,5} ]]; then
+    NUM=$1
+  else
+    SLIST=$(stu $1 | fx 'this.forEach(x => console.log(`${x.student_ename},${x.psid},${x.sh_grade}`))' 2>/dev/null | xargs)
+    LIST=(${(s/ /)SLIST})
+    echo "Select the student from the following:"
+    select STUDENT in $LIST
+    do
+      if [[ -n $STUDENT ]]; then
+        echo $STUDENT
+        # IFS=',' echo (${STUDENT})
+        KNUM=(${(s/,/)STUDENT})
+        INUM=${KNUM[2]}
+        NUM=$(echo $INUM | sed 's/[^0-9]*//g')
+        echo $NUM
+        break
+      fi
+    done
+  fi
+  if [[ ! -e "$HOME/tmp/icons/s$NUM.jpg" ]]; then
+    curl "https://icon.scie.com.cn/user/sicon/s${NUM}_o.jpg" -o "$HOME/tmp/icons/s$NUM.jpg"
+  fi
+
+  open "$HOME/tmp/icons/s$NUM.jpg"
+}
+
+ip () {
+  curl --request GET \
+    --header 'accept: application/json' \
+    --header 'content-type: application/json' \
+    --url "https://freegeoip.app/json/$1"
+}
+
+
+
+function my_inbox() {
+  emulate -L zsh
+  things.sh inbox
+}
+function my_inbox_callback() {
+  emulate -L zsh
+  typeset -g todo_inbox_count=$(echo $3 | grep 'things:///show' -c)
+  p10k display -r
+}
+
+async_stop_worker inbox_worker
+async_start_worker inbox_worker -u
+async_unregister_callback inbox_worker
+async_register_callback inbox_worker my_inbox_callback
+
+function prompt_my_todo_inbox() {
+  emulate -L zsh
+  p10k segment -t '$todo_inbox_count' -e +r -i $'\uf7fa' -f 'blue'
+  async_job inbox_worker my_inbox
+}
+
+
+function my_today() {
+  emulate -L zsh
+  things.sh today
+}
+function my_today_callback() {
+  emulate -L zsh
+  typeset -g todo_today_count=$(echo $3 | grep 'things:///show' -c)
+  p10k display -r
+}
+
+async_stop_worker today_worker
+async_start_worker today_worker -u
+async_unregister_callback today_worker
+async_register_callback today_worker my_today_callback
+
+function prompt_my_todo_today() {
+  emulate -L zsh
+  p10k segment -t '$todo_today_count' -e +r -i $'\uf005' -f 'yellow'
+  async_job today_worker my_today
+}
+
+
+function my_ip() {
+  emulate -L zsh
+  typeset -g my_ip_next_fetch=$(($(gdate +%s) + 10))
+  things.sh today
+}
+function my_ip_callback() {
+  emulate -L zsh
+  typeset -g _count=1
+  p10k display -r
+}
+
+# async_stop_worker ip_worker
+# async_start_worker ip_worker -u
+# async_unregister_callback ip_worker
+# async_register_callback ip_worker my_ip_callback
+
+# function prompt_my_ip() {
+#   emulate -L zsh
+#   p10k segment -t '$' -e +r -i $'\uf005' -f 'yellow'
+#   async_job ip_worker my_ip
+# }

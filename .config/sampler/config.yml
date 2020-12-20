@@ -1,0 +1,118 @@
+runcharts:
+  - title: Response time
+    position: [[0, 0], [32, 13]]
+    rate-ms: 1000
+    legend:
+        enabled: true
+        details: true
+    scale: 2
+    items:
+      - label: BAIDU
+        sample: curl -o /dev/null -s -w '%{time_total}'  https://baidu.com
+      - label: BILIBILI
+        sample: curl -o /dev/null -s -w '%{time_total}'  https://bilibili.com
+      - label: BLOG
+        sample: curl -o /dev/null -s -w '%{time_total}'  https://jokens.me
+      - label: BING
+        sample: curl -o /dev/null -s -w '%{time_total}'  https://cn.bing.com
+gauges:
+  - title: Minute progress
+    position: [[0, 18], [48, 2]]
+    rate-ms: 500
+    scale: 2
+    color: 9
+    percent-only: false
+    cur:
+        sample: date +%S
+    max:
+        sample: echo 60
+    min:
+        sample: echo 0
+  - title: Hour progress
+    position: [[0, 20], [48, 2]]
+    rate-ms: 3000
+    scale: 2
+    color: 11
+    percent-only: false
+    cur:
+        sample: date +%M
+    max:
+        sample: echo 60
+    min:
+        sample: echo 0
+  - title: Day progress
+    position: [[0, 22], [48, 2]]
+    rate-ms: 3000
+    color: 10
+    cur:
+        sample: dechour.py
+    max:
+        sample: echo 24
+    min:
+        sample: echo 0
+textboxes:
+  - title: Weather
+    position: [[53, 0], [31, 12]]
+    rate-ms: 900000
+    color: 4
+    sample: |-
+        curl 'wttr.in?2nQFT' |
+        rg '┬' -r '√√' --passthru |
+        tr '√' '\n' |
+        rg -v '─' |
+        rg '([\u{2196}-\u{2199}].+?)  ' -r '$1 ' --passthru |
+        trim
+    border: false
+  - title: Calendar
+    position: [[70, 18], [10, 6]]
+    color: 13
+    sample: cal
+  - title: Smart Cow
+    position: [[32, 0], [22, 12]]
+    rate-ms: 3600000
+    color: 1
+    sample: quote | cowsay
+    border: false
+  - title: TODOs Today
+    position: [[48, 13], [32, 5]]
+    rate-ms: 2000
+    color: 12
+    sample: things.sh today
+  - title: Mail
+    position: [[0, 30], [39, 10]]
+    rate-ms: 120000
+    color: 2
+    sample: topemail 4
+  - title: TODOs Upcoming
+    position: [[39, 30], [41, 10]]
+    rate-ms: 2000
+    color: 3
+    sample: things.sh upcoming
+  - title: TODOs Inbox
+    position: [[48, 18], [22, 6]]
+    rate-ms: 2000
+    color: 8
+    sample: things.sh inbox
+asciiboxes:
+  - title: Date
+    position: [[63, 24], [17, 5]]
+    color: 7
+    sample: date +%b\ %d
+  - title: Local
+    position: [[24, 13], [24, 5]]
+    rate-ms: 500
+    color: 195
+    sample: date +%H:%M:%S
+    font: 2d
+  - title: UTC
+    position: [[0, 13], [24, 5]]
+    rate-ms: 500
+    color: 195
+    sample: env TZ=UTC date +%H:%M:%S
+    font: 2d
+  - title: ""
+    position: [[0, 24], [63, 5]]
+    rate-ms: 30000
+    color: 9
+    sample: greet Joseph
+    border: false

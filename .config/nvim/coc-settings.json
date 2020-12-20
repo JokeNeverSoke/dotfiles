@@ -1,0 +1,8 @@
+{
+  "python.linting.pylintEnabled": true,
+  "python.linting.prospectorEnabled": false,
+  "python.linting.mypyEnabled": true,
+  "eslint.packageManager": "yarn",
+  "tsserver.enable": false,
+  "eslint.enable": true
+}
