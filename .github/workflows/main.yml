@@ -29,4 +29,4 @@ jobs:
         env:
           URL: ${{ github.repositoryUrl }}
         run:
-          yadm clone $URL
+          yadm clone --bootstrap $URL
