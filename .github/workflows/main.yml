@@ -26,8 +26,11 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Install YADM
-        run: sudo apt-get install yadm
+      - name: Install yadm
+        run: |
+          curl https://raw.githubusercontent.com/TheLocehiliosan/yadm/master/yadm > yadm
+          mv ./yadm /bin/yadm
+          chmod +x /bin/yadm
       - name: Bootstrap yadm
         env:
           URL: ${{ github.repositoryUrl }}
