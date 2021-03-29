@@ -29,8 +29,8 @@ jobs:
       - name: Install yadm
         run: |
           curl https://raw.githubusercontent.com/TheLocehiliosan/yadm/master/yadm > yadm
-          sudo mv ./yadm /bin/yadm
-          sudo chmod +x /bin/yadm
+          sudo mv ./yadm /usr/local/bin/yadm
+          sudo chmod +x /usr/local/bin/yadm
       - name: Bootstrap yadm
         env:
           URL: ${{ github.repositoryUrl }}
