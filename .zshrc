@@ -17,6 +17,9 @@ llog tmux status: $TMUX
 llog add environmental variables
 source ~/.config/zsh/.env
 
+llog add secret variables
+source ~/.config/zsh/.secrets
+
 llog configuring p10k
 source ~/.config/zsh/.p10k.zsh
 
