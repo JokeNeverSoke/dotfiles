@@ -1,6 +1,7 @@
 #/bin/usr/env bash
 
 
+echo starting bootstrap...
 
 # install homebrew with brewfile
 system_type=$(uname -s)
