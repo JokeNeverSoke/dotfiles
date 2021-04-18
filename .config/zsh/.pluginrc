@@ -55,6 +55,9 @@ zinit snippet ~/.pipenv.zsh
 zinit ice wait lucid
 zinit snippet ~/.config/gh/ghcom
 
+# just completions
+zinit ice lucid wait'1' as"completion" mv"just.zsh -> _just"
+zinit snippet https://raw.githubusercontent.com/casey/just/master/completions/just.zsh
 
 # tmux completions
 zinit wait lucid atload'zicompinit; zicdreplay' blockf for \

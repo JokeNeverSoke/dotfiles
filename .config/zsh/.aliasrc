@@ -10,6 +10,14 @@ alias gz="git cz"
 
 alias fk=fuck
 
+p () {
+  proxy enable
+  $@
+  proxy disable
+}
+
+alias j=just
+
 function vim {
   echo "USE NVIM"
   echo "Punishing you to pause for 5 seconds"
